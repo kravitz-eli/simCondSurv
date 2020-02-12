@@ -11,4 +11,6 @@ sample_gompertz <- function(
 
   1 / b * log( exp(b * t0) - b / (gamma * a) * log(1 - u)) - t0
 
+  1/b * log(1 - (b * exp(-b * t0) * log((1 - u)^(1/ gamma))) / a )
+
 }
