@@ -11,5 +11,17 @@
 #'
 #' @examples
 cond_sample <- function(u, t0, HR, params) {
-  UseMethod("cond_sample", u, t0, HR, params)
+
+  browser()
+
+  UseMethod("cond_sample", u , t0, HR, params)
+
+}
+
+
+cond_sample.default <- function(x, ...){
+
+  warning(paste("Can't handle distributions of ",
+                class(x)))
+
 }

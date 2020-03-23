@@ -4,11 +4,9 @@
 \alias{cond_sample}
 \title{Generic function to call samplers}
 \usage{
-cond_sample(distribution, u, t0, HR)
+cond_sample(u, t0, HR, params)
 }
 \arguments{
-\item{distribution}{Character. Nam of conditional distribution to sample from}
-
 \item{u}{numeric vector, \eqn{0 \leq u  \leq 1} for all elements in u.}
 
 \item{t0}{Nonnegative real number. The time the survival function is
@@ -17,9 +15,6 @@ conditioned on. \code{t0 = 0} will return samples from the unconditional distrib
 \item{HR}{hazard ratio between treatment arm and control arm}
 
 \item{params}{named list of parameters for distribution}
-}
-\value{
-
 }
 \description{
 Generic function to call samplers

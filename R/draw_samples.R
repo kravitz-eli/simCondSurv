@@ -13,11 +13,11 @@
 #' @export
 #'
 #' @examples
-draw_samples = function(
+draw_samples <- function(
   n_samples,
   distribution,
   t0,
-  HR,
+  HR = 1,
   params
 ){
 
@@ -25,5 +25,6 @@ draw_samples = function(
 
   class(u) <- distribution
 
+  cond_sample <- cond_sample(u, t0, HR, params)
 
 }

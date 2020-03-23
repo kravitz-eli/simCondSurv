@@ -4,15 +4,8 @@
 \alias{run_jags}
 \title{Runs a user-supplied JAGS model and returns the output}
 \usage{
-run_jags(
-  model_file,
-  data,
-  chains,
-  iter = 10000L,
-  burn = 1000L,
-  track_variable_names,
-  progress.bar = "none"
-)
+run_jags(model_file, data, chains, iter = 10000L, burn = 1000L,
+  track_variable_names, progress.bar = "none")
 }
 \arguments{
 \item{model_file}{string containing name of JAGS model to run. Must be stored in jags/ for now}

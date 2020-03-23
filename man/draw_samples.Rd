@@ -4,7 +4,7 @@
 \alias{draw_samples}
 \title{Draws samples from a user specified conditional survival function}
 \usage{
-draw_samples(n_samples, distribution, t0, HR, params)
+draw_samples(n_samples, distribution, t0, HR = 1, params)
 }
 \arguments{
 \item{n_samples}{Positive integer. The number of samples to draw from

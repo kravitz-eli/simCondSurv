@@ -11,12 +11,12 @@
 cond_sample.gompertz <- function(
   u,
   t0,
-  params,
-  HR = 1
-)
-{
+  HR,
+  params
+){
 
-  1 / b * log( exp(b * t0) - b / (beta * a) * log(1 - u)) - t0
-
-
+  with(
+    params,
+    1 / b * log( exp(b * t0) - b / (beta * a) * log(1 - u)) - t0
+  )
 }

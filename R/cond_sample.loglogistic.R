@@ -1,5 +1,5 @@
-#'  Simulate random variables from a Weibull distribution. The
-#'  function is parameterized with hazard: \eqn{\nu \lambda t^{nu-1}}
+#'  Simulate random variables from a log logistic distribution. The
+#'  function is parameterized with hazard: \eqn{\frac{(\beta / \alpha)(t / \alpha)^{\beta-1}}{1+(t / \alpha)^{\beta}}}
 #'
 #' @inheritParams cond_sample
 #' @param params a named list containing \code{alpha}, the scale
@@ -9,10 +9,10 @@
 #' @export
 #'
 #' @examples
-inverse_log_logistic = function(
+cond_sample.loglogistic <- function(
   u,
   t0,
-  HR = 1,
+  HR,
   params
 ){
 
