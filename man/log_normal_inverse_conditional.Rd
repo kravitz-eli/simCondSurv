@@ -2,10 +2,9 @@
 % Please edit documentation in R/log_normal_inverse_conditional.R
 \name{log_normal_inverse_conditional}
 \alias{log_normal_inverse_conditional}
-\title{Draws samples from a Lognormal survival model conditional on a timepoint and adjusted for hazard ratio}
+\title{Draws samples from a Lognormal survival model conditional on a timepoint and adjusted for a hazard ratio, \eqn{T \sim f(t|t_0; \gamma)}}
 \usage{
-log_normal_inverse_conditional(u, t0 = 0, mu = 0, sigma = 1,
-  gamma = 1)
+log_normal_inverse_conditional(u, t0 = 0, mu = 0, sigma = 1, gamma = 1)
 }
 \arguments{
 \item{u}{vector of numbers between 0 and 1. Generally a vector of uniform \link{0,1} random variable}
@@ -22,7 +21,7 @@ log_normal_inverse_conditional(u, t0 = 0, mu = 0, sigma = 1,
 vector of survival times following the Lognormal survival model parameterized by \eqn{mu} and \eqn{sigma}
 }
 \description{
-Draws samples from a Lognormal survival model conditional on a timepoint and adjusted for hazard ratio
+Draws samples from a Lognormal survival model conditional on a timepoint and adjusted for a hazard ratio, \eqn{T \sim f(t|t_0; \gamma)}
 }
 \examples{
 log_normal_inverse_conditional(0.5, t0 = 1, mu = 0.2, sigma = 1, gamma = 1)
