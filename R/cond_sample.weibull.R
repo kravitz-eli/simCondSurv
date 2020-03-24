@@ -16,8 +16,6 @@ cond_sample.weibull <- function(
   params
 ){
 
-  browser()
-
   with(
     params,
     (-log(1 - u) / (lambda * HR) + t0^nu) ^ (1/nu) - t0

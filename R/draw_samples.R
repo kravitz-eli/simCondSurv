@@ -14,17 +14,24 @@
 #'
 #' @examples
 draw_samples <- function(
-  n_samples,
+  n_samples = 10,
   distribution,
-  t0,
+  t0 = 0,
   HR = 1,
   params
 ){
 
   u <- runif(n_samples, 0, 1)
+  attr(u, "class") <- c(distribution, "numeric")
 
-  class(u) <- distribution
+  # x = structure(list(
+  #   "u" = u,
+  #   "t0" = t0,
+  #   "HR" = HR,
+  #   "params" = params),
+  #   class = distribution
+  # )
 
-  cond_sample <- cond_sample(u, t0, HR, params)
+  sample = cond_sample(u, t0 = t0, HR = HR, params = params)
 
 }

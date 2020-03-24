@@ -10,18 +10,27 @@
 #' @export
 #'
 #' @examples
-cond_sample <- function(u, t0, HR, params) {
+cond_sample <- function(x, ...) {
 
-  browser()
-
-  UseMethod("cond_sample", u , t0, HR, params)
+  UseMethod("cond_sample", x)
 
 }
 
 
+#' Method for when the user supplied distribution doesn't match one of the
+#' options in the code.
+#'
+#' @param x
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 cond_sample.default <- function(x, ...){
-
-  warning(paste("Can't handle distributions of ",
+  warning(paste("No methods for distribution:",
                 class(x)))
 
 }
+
+

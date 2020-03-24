@@ -4,19 +4,29 @@
 \alias{run_jags}
 \title{Runs a user-supplied JAGS model and returns the output}
 \usage{
-run_jags(model_file, data, chains, iter = 10000L, burn = 1000L,
-  track_variable_names, progress.bar = "none")
+run_jags(distribution, prop_haz = TRUE, time, event, trt, chains,
+  iter = 10000L, burn = 1000L, n_adapt = 1000L, track_variable_names,
+  progress.bar = "none")
 }
 \arguments{
-\item{model_file}{string containing name of JAGS model to run. Must be stored in jags/ for now}
+\item{distribution}{Character. name of the distribution of the parametric model}
 
-\item{data}{list of parameters and data to pass to JAGS}
+\item{prop_haz}{logical. Should a proportional hazards model be fit (TRUE) or a
+nonproportional hazards model}
+
+\item{time}{Positive numeric. survival times}
+
+\item{event}{0/1 variable. Event happened (\code{event = 1}) or observation is
+censored (\code{event = 0})}
+
+\item{trt}{0/1 variable. Indicates control arm (\code{trt = 0}) or
+experimental arm (\code{trt = 1})}
 
 \item{chains}{integer number of MCMC chains to run}
 
 \item{iter}{integer number of MCMC iterations, default 100,000}
 
-\item{burn}{integer length of burnin, default 1,000}
+\item{burn}{integer length of burn in, default 1,000}
 
 \item{track_variable_names}{a character vector giving the names of variables to be monitored}
 

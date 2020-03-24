@@ -7,9 +7,6 @@
 #' @return vector of survival times following the Lognormal survival model parameterized by \eqn{mu} and \eqn{sigma}
 #' @export
 #'
-#' @examples
-#' log_normal_inverse_conditional(0.5, t0 = 1, mu = 0.2, sigma = 1, gamma = 1)
-#' log_normal_inverse_conditional(seq(0, 1, by = 0.2))
 cond_sample.lognormal  <- function(
   u,
   t0,

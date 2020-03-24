@@ -6,8 +6,6 @@
 #'
 #' @return
 #' @export
-#'
-#' @examples
 cond_sample.gompertz <- function(
   u,
   t0,
@@ -17,6 +15,6 @@ cond_sample.gompertz <- function(
 
   with(
     params,
-    1 / b * log( exp(b * t0) - b / (beta * a) * log(1 - u)) - t0
+    1 / b * log( exp(b * t0) - b / (HR * a) * log(1 - u)) - t0
   )
 }

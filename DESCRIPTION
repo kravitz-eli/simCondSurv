@@ -17,3 +17,7 @@ Suggests:
     spelling
 Language: en-US
 RoxygenNote: 7.0.2
+Imports: 
+    magrittr,
+    rjags,
+    fs

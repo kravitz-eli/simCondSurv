@@ -1,0 +1,22 @@
+model{
+
+  for(i in 1:length(t)) {
+    ##Bernoulli is used to deal with custom joint likelihood with right censoring
+    ones[i]~dbern(p[i]/10000000)
+
+    ## ith contribution to the joint likelihood
+    p[i] <- exp(-H[i])*pow(h[i],event[i])
+
+    ## hazard and cumulative hazard functions
+    h[i] <- exp(beta * TRT[i])*nu*lambda*pow(t[i],nu-1)
+    H[i] <- exp(beta * TRT[i])*lambda*pow(t[i],nu)
+  }
+
+  ##Priors
+  beta~dnorm(0,.001)
+  nu~dnorm(0,.1)T(0,)
+  lambda~dgamma(.1,.1)
+
+  P = prod(p)
+
+}

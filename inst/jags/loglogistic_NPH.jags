@@ -1,0 +1,19 @@
+model{
+
+  for(i in 1:length(t)) {
+    ones[i] ~ dbern(p[i]/10000000000)
+    p[i] <- S[i]*pow(h[i],event[i])
+
+    h[i] <- (beta[TRT[i]]/alpha[TRT[i]])*pow(t[i]/alpha[TRT[i]],beta[TRT[i]]-1)/(1+pow(t[i]/alpha[TRT[i]],beta[TRT[i]]))
+    S[i] <- 1/(1+pow(t[i]/alpha[TRT[i]],beta[TRT[i]]))
+  }
+
+  alpha[1] ~ dnorm(0,.001)T(0,)
+  alpha[2] ~ dnorm(0,.001)T(0,)
+  beta[1] ~ dnorm(0,.001)T(0,)
+  beta[2] ~ dnorm(0,.001)T(0,)
+
+  P = prod(p)
+
+
+}

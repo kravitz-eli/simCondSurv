@@ -4,7 +4,7 @@
 \alias{cond_sample}
 \title{Generic function to call samplers}
 \usage{
-cond_sample(u, t0, HR, params)
+cond_sample(x, ...)
 }
 \arguments{
 \item{u}{numeric vector, \eqn{0 \leq u  \leq 1} for all elements in u.}
