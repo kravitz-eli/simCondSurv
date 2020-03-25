@@ -15,6 +15,7 @@ censor_survival_time = function(time, additional_time, event, n_events, trt){
                     "event" = event,
                     "trt" = trt,
                     "original_time" = time,
-                    "additional_time" = additional_time))
+                    "additional_time" = additional_time,
+                    "censor_time" = censor_time))
 
 }

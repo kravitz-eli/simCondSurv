@@ -9,12 +9,13 @@
 #' @param trt 0/1 variable. Indicates control arm (\code{trt = 0}) or
 #' experimental arm (\code{trt = 1})
 #' @param chains integer number of MCMC chains to run
-#' @param iter integer number of MCMC iterations, default 100,000
-#' @param burn integer length of burn in, default 1,000
+#' @param n_iter positive integer number of MCMC iterations, default 100,000
+#' @param n_burn positive integer length of burn in, default 1,000
+#' @param n_adapt number of iterations for adaption in JAGS
 #' @param track_variable_names 	a character vector giving the names of variables to be monitored
 #' @param progress.bar should JAGS show a progress bar, "none" (default_), "text" , or "GUI"
 #'
-#' @return a mcmc.list of posterior draws of parameters in \code{track_variable_names}, contains matrix of size (iter x track_num_variables)
+#' @return a mcmc.list of posterior draws of parameters in \code{track_variable_names}, contains matrix of size (n_iter x track_num_variables)
 #' @export
 #'
 #' @examples
@@ -24,9 +25,9 @@ run_jags <- function(
   time,
   event,
   trt,
-  chains,
-  iter = 1e4L,
-  burn = 1e3L,
+  chains = 2,
+  n_iter = 1e3L,
+  n_burn = 1e3L,
   n_adapt = 1e3L,
   track_variable_names,
   progress.bar = "none"
@@ -41,13 +42,13 @@ run_jags <- function(
     n.chains = chains,
     inits = jags_init,
     n.adapt = n_adapt,
-    quiet = TRUE
+    quiet = FALSE
   )
-  stats::update(jags_model, n.iter = burn, progress.bar = "none")
+  stats::update(jags_model, n.iter = n_burn, progress.bar = "none")
   rjags::coda.samples(
     jags_model,
     variable.names = track_variable_names,
-    n.iter = iter,
+    n.iter = n_iter,
     progress.bar = progress.bar
   )
 }
@@ -62,8 +63,8 @@ jags_init <- function() {
 get_model_file <- function(model_file) {
   . <- NULL
   fs::path_ext_set(model_file, "jags") %>%
-    file.path("jags", .) %>%
-    system.file(package = "simCondSurv", mustWork = TRUE)
+    file.path("inst/jags", .)
+  # %>% system.file(package = "simCondSurv", mustWork = TRUE)
 }
 
 make_jags_data = function(time, event, trt, prop_haz = TRUE) {

@@ -12,7 +12,7 @@
 cond_sample.loglogistic <- function(
   u,
   t0,
-  HR,
+  trt,
   params
 ){
 
@@ -20,6 +20,6 @@ cond_sample.loglogistic <- function(
     params,
     alpha * (
       (1 + (t0/alpha) ^ beta) /
-        ((1 - u)^ (1 / HR)) - 1) ^ (1 / beta) - t0
+        ((1 - u)^ (1 / exp(log_HR * trt))) - 1) ^ (1 / beta) - t0
   )
 }

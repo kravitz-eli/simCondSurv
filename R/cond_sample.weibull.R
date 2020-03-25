@@ -3,7 +3,8 @@
 #'
 #' @inheritParams cond_sample
 #' @param params a named list containing \code{lambda}, the Weibull scale
-#'  parameter, and \code{nu}, the Weibull shape parameter
+#'  parameter, and \code{nu}, the Weibull shape parameter, and \code{log_HR},
+#'  log hazard ratio
 #'
 #' @return a vector of failure times conditional on \code{t0}
 #' @export
@@ -12,12 +13,12 @@
 cond_sample.weibull <- function(
   u,
   t0,
-  HR,
+  trt = 0,
   params
 ){
 
   with(
     params,
-    (-log(1 - u) / (lambda * HR) + t0^nu) ^ (1/nu) - t0
+    (-log(1 - u) / (lambda * exp(log_HR * trt)) + t0^nu) ^ (1/nu) - t0
   )
 }

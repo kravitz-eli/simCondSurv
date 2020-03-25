@@ -1,9 +1,12 @@
 library(rjags)
+library(magrittr)
 
+source("R/utils-pipe.R")
 source("R/cond_sample.R")
 source("R/cond_sample.weibull.R")
 
-source("R/simulate_cond_survival.R")
+source("R/run_jags.R")
+source("R/get_conditional_times.R")
 source("R/censor_survival_time.R")
 
 monaL = data("monaleesa2")
@@ -15,11 +18,15 @@ trt = monaleesa2$trt
 
 
 distribution = "weibull"
-params = list("lambda" = 1.5, "nu" = 0.20)
+# params = list("lambda" = 1.5, "nu" = 0.20)
 
-n_events = 250
-log_HR = 0
+# n_events = 250
+# log_HR = 0
 
+# Fit the JAGS model ----
+n_iter = 5e3
+n_burn = 1e4
+n_adapt = 1e3
 
 model = run_jags(
   distribution = distribution,
@@ -28,13 +35,16 @@ model = run_jags(
   event = event,
   trt = trt,
   chains = 1,
-  iter = 1000,
-  burn = 1000,
-  n_adapt = 1000,
+  n_iter = n_iter,
+  n_burn = n_burn,
+  n_adapt = n_adapt,
   track_variable_names = c("beta", "nu", "lambda")
 )
 
-post_params = as_tibble(model[[1]])
+post_params = tibble::as_tibble(model[[1]]) %>%
+  setNames(c("log_HR", "lambda", "nu"))
+colMeans(post_params)
+
 
 surv_times = get_conditional_times(
   time = time,
@@ -42,8 +52,5 @@ surv_times = get_conditional_times(
   trt = trt,
   distribution = distribution,
   n_events = 250,
-  log_HR = tibble::deframe(post_params[1, "beta"]),
-  params = as.list(post_params[1, c("lambda", "nu")])
+  params = post_params
 )
-
-

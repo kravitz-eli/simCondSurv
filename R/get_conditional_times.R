@@ -1,7 +1,8 @@
-#' Simulate posterior predictive distribution of conditional survival times.
+
+#' Generate ONE sample from the posterior predictive of conditional survival times.
 #'
 #' Get the posterior predictive distribution of conditional survival times for a
-#' SINGLE posterior sample. This function should be interated (for-loop or apply or map)
+#' SINGLE posterior sample. This function should be interated
 #' over all posterior samples.
 #'
 #' @param time positive numeric. Survival times
@@ -16,22 +17,21 @@
 #' @export
 #'
 #' @examples
-get_conditional_times = function(
+get_single_conditional_times = function(
   time,
   event,
   trt,
   distribution,
   n_events = NA,
-  log_HR = 0,
   params
 ){
 
 
-  u <- structure(runif(length(time)), class = c(distribution, "numeric"))
+  u <- structure(runif(length(time), 0 , 1), class = c(distribution, "numeric"))
   additional_time <- (1 - event) * cond_sample(u,
-                                              t0 = time,
-                                              HR = exp(trt * log_HR),
-                                              params = params)
+                                               t0 = time,
+                                               trt = trt,
+                                               params = params)
 
 
   # Simulated data is censored
@@ -43,7 +43,43 @@ get_conditional_times = function(
                       "event" = 1,
                       "trt" = trt,
                       "original_time" = time,
-                      "additional_time" = additional_time))
+                      "additional_time" = additional_time,
+                      "censor_time" = censor_time))
   }
+
+}
+
+#' Generate samples from the posterior predictive of conditional survival times.
+#'
+#'
+#` @inheritParams get_single_conditional_times
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_conditional_times = function(
+  time,
+  event,
+  trt,
+  distribution,
+  n_events = NA,
+  params
+){
+
+  post_pred_times = vector("list", length = nrow(params))
+
+  for (i in 1:nrow(params)) {
+    post_pred_times[[i]] = get_single_conditional_times(
+      time = time,
+      event = event,
+      trt = trt,
+      distribution = distribution,
+      n_events = 250,
+      params = params[i, ]
+    )
+  }
+
+  return(post_pred_times)
 
 }

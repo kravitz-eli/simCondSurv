@@ -5,8 +5,8 @@
 \title{Runs a user-supplied JAGS model and returns the output}
 \usage{
 run_jags(distribution, prop_haz = TRUE, time, event, trt, chains,
-  iter = 10000L, burn = 1000L, n_adapt = 1000L, track_variable_names,
-  progress.bar = "none")
+  n_iter = 10000L, n_burn = 1000L, n_adapt = 1000L,
+  track_variable_names, progress.bar = "none")
 }
 \arguments{
 \item{distribution}{Character. name of the distribution of the parametric model}
@@ -24,16 +24,18 @@ experimental arm (\code{trt = 1})}
 
 \item{chains}{integer number of MCMC chains to run}
 
-\item{iter}{integer number of MCMC iterations, default 100,000}
+\item{n_iter}{positive integer number of MCMC iterations, default 100,000}
 
-\item{burn}{integer length of burn in, default 1,000}
+\item{n_burn}{positive integer length of burn in, default 1,000}
+
+\item{n_adapt}{number of iterations for adaption in JAGS}
 
 \item{track_variable_names}{a character vector giving the names of variables to be monitored}
 
 \item{progress.bar}{should JAGS show a progress bar, "none" (default_), "text" , or "GUI"}
 }
 \value{
-a mcmc.list of posterior draws of parameters in \code{track_variable_names}, contains matrix of size (iter x track_num_variables)
+a mcmc.list of posterior draws of parameters in \code{track_variable_names}, contains matrix of size (n_iter x track_num_variables)
 }
 \description{
 Runs a user-supplied JAGS model and returns the output

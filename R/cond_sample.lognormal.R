@@ -10,7 +10,7 @@
 cond_sample.lognormal  <- function(
   u,
   t0,
-  HR,
+  trt,
   params
 ) {
 
@@ -18,7 +18,7 @@ cond_sample.lognormal  <- function(
     params,
     exp(
       sigma * qnorm(
-        1 - (1 - u)^(1 / HR) * pnorm(-1 * ( log(t0) - mu ) / sigma )
+        1 - (1 - u)^(1 / exp(log_HR * trt)) * pnorm(-1 * ( log(t0) - mu ) / sigma )
       ) + mu
     ) - t0
   )
