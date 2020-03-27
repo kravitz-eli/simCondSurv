@@ -4,15 +4,13 @@
 \alias{cond_sample.lognormal}
 \title{Draws samples from a Lognormal survival model conditional on a timepoint and adjusted for a hazard ratio, \eqn{T \sim f(t|t_0; \gamma)}}
 \usage{
-\method{cond_sample}{lognormal}(u, t0, HR, params)
+\method{cond_sample}{lognormal}(u, t0, trt, params)
 }
 \arguments{
 \item{u}{numeric vector, \eqn{0 \leq u  \leq 1} for all elements in u.}
 
 \item{t0}{Nonnegative real number. The time the survival function is
 conditioned on. \code{t0 = 0} will return samples from the unconditional distribution}
-
-\item{HR}{hazard ratio between treatment arm and control arm}
 
 \item{params}{a named list containing \code{mu}, mean of lognormal distribution
 on the log-scale, and \code{sigma}, standard deviation of lognormal distribution on the log-scale}

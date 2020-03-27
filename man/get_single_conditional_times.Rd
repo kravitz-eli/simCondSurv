@@ -5,7 +5,7 @@
 \title{Generate ONE sample from the posterior predictive of conditional survival times.}
 \usage{
 get_single_conditional_times(time, event, trt, distribution,
-  n_events = NA, log_HR = 0, params)
+  n_events = NA, params)
 }
 \arguments{
 \item{time}{positive numeric. Survival times}

@@ -5,15 +5,13 @@
 \title{Simulate random variables from a Gompertz distribution. The
 function is parameterized with hazard: \eqn{\lambda(x) =  a \exp(bx)}}
 \usage{
-\method{cond_sample}{gompertz}(u, t0, HR, params)
+\method{cond_sample}{gompertz}(u, t0, trt = 0, params)
 }
 \arguments{
 \item{u}{numeric vector, \eqn{0 \leq u  \leq 1} for all elements in u.}
 
 \item{t0}{Nonnegative real number. The time the survival function is
 conditioned on. \code{t0 = 0} will return samples from the unconditional distribution}
-
-\item{HR}{hazard ratio between treatment arm and control arm}
 
 \item{params}{list with elements a and b, the parameters of a gompertz distribution.}
 }

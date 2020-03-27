@@ -5,7 +5,7 @@
 \title{Simulate random variables from a Weibull distribution. The
 function is parameterized with hazard: \eqn{\nu \lambda t^{nu-1}}}
 \usage{
-\method{cond_sample}{weibull}(u, t0, HR, params)
+\method{cond_sample}{weibull}(u, t0, trt = 0, params)
 }
 \arguments{
 \item{u}{numeric vector, \eqn{0 \leq u  \leq 1} for all elements in u.}
@@ -13,10 +13,9 @@ function is parameterized with hazard: \eqn{\nu \lambda t^{nu-1}}}
 \item{t0}{Nonnegative real number. The time the survival function is
 conditioned on. \code{t0 = 0} will return samples from the unconditional distribution}
 
-\item{HR}{hazard ratio between treatment arm and control arm}
-
 \item{params}{a named list containing \code{lambda}, the Weibull scale
-parameter, and \code{nu}, the Weibull shape parameter}
+parameter, and \code{nu}, the Weibull shape parameter, and \code{log_HR},
+log hazard ratio}
 }
 \value{
 a vector of failure times conditional on \code{t0}

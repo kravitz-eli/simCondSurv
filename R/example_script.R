@@ -8,8 +8,9 @@ source("R/cond_sample.weibull.R")
 source("R/run_jags.R")
 source("R/get_conditional_times.R")
 source("R/censor_survival_time.R")
+source("R/run_projections.R")
 
-monaL = data("monaleesa2")
+data("monaleesa2")
 
 time = monaleesa2$time
 event = monaleesa2$event
@@ -17,15 +18,11 @@ trt = monaleesa2$trt
 
 
 
-distribution = "weibull"
-# params = list("lambda" = 1.5, "nu" = 0.20)
+distribution = "lognormal"
 
-# n_events = 250
-# log_HR = 0
-
-# Fit the JAGS model ----
-n_iter = 5e3
-n_burn = 1e4
+# Fit the JAGS model ---------------------------------------
+n_iter = 1e3
+n_burn = 1e3
 n_adapt = 1e3
 
 model = run_jags(
@@ -37,12 +34,12 @@ model = run_jags(
   chains = 1,
   n_iter = n_iter,
   n_burn = n_burn,
-  n_adapt = n_adapt,
-  track_variable_names = c("beta", "nu", "lambda")
+  n_adapt = n_adapt
 )
 
-post_params = tibble::as_tibble(model[[1]]) %>%
-  setNames(c("log_HR", "lambda", "nu"))
+post_params = tibble::as_tibble(model[[1]])
+names(post_params)[1] = "log_HR"
+
 colMeans(post_params)
 
 
@@ -54,3 +51,20 @@ surv_times = get_conditional_times(
   n_events = 250,
   params = post_params
 )
+
+time_projections = get_projections(
+  simulated_times = surv_times,
+  crit_values = 0.75
+)
+
+plots = make_plots(
+  params = post_params,
+  data = monaleesa2,
+  post_pred_HR = time_projections$HR_at_events,
+  axis_min_time = 0,
+  axis_max_time = 100
+)
+
+plots$survival_plot
+
+

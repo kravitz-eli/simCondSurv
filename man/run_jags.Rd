@@ -4,8 +4,8 @@
 \alias{run_jags}
 \title{Runs a user-supplied JAGS model and returns the output}
 \usage{
-run_jags(distribution, prop_haz = TRUE, time, event, trt, chains,
-  n_iter = 10000L, n_burn = 1000L, n_adapt = 1000L,
+run_jags(distribution, prop_haz = TRUE, time, event, trt, chains = 2,
+  n_iter = 1000L, n_burn = 1000L, n_adapt = 1000L,
   track_variable_names, progress.bar = "none")
 }
 \arguments{

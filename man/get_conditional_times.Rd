@@ -5,7 +5,7 @@
 \title{Generate samples from the posterior predictive of conditional survival times.}
 \usage{
 get_conditional_times(time, event, trt, distribution, n_events = NA,
-  log_HR = 0, params)
+  params)
 }
 \description{
 Generate samples from the posterior predictive of conditional survival times.

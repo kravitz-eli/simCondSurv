@@ -26,7 +26,6 @@ get_single_conditional_times = function(
   params
 ){
 
-
   u <- structure(runif(length(time), 0 , 1), class = c(distribution, "numeric"))
   additional_time <- (1 - event) * cond_sample(u,
                                                t0 = time,

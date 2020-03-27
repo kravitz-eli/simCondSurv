@@ -5,15 +5,13 @@
 \title{Simulate random variables from a log logistic distribution. The
 function is parameterized with hazard: \eqn{\frac{(\beta / \alpha)(t / \alpha)^{\beta-1}}{1+(t / \alpha)^{\beta}}}}
 \usage{
-\method{cond_sample}{loglogistic}(u, t0, HR, params)
+\method{cond_sample}{loglogistic}(u, t0, trt, params)
 }
 \arguments{
 \item{u}{numeric vector, \eqn{0 \leq u  \leq 1} for all elements in u.}
 
 \item{t0}{Nonnegative real number. The time the survival function is
 conditioned on. \code{t0 = 0} will return samples from the unconditional distribution}
-
-\item{HR}{hazard ratio between treatment arm and control arm}
 
 \item{params}{a named list containing \code{alpha}, the scale
 parameter (and media), and \code{beta}, the shape parameter}
