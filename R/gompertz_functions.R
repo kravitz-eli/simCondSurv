@@ -18,3 +18,24 @@ cond_sample.gompertz <- function(
     1 / b * log(1 - b/(a * exp(log_HR * trt)) * log(1 - u) * exp(-b * t0))
   )
 }
+
+
+
+eval_cdf.weibull = function(t, trt = 0, params){
+  with(
+    params,
+    pweibull(
+      t,
+      shape = nu,
+      scale = (exp(log_HR * trt) * lambda) ^ (-1 / nu)
+    )
+  )
+}
+
+eval_pdf.weibull = function(t, trt = 0, lambda, nu, log_HR = 0){
+  dweibull(
+    t,
+    shape = nu,
+    scale = (exp(log_HR * trt) * lambda) ^ (-1 / nu)
+  )
+}

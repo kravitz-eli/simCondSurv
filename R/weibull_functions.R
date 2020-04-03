@@ -23,6 +23,25 @@ cond_sample.weibull <- function(
   )
 }
 
+#' Alternate parameterization of Weibull CDF with hazard: \eqn{\nu \lambda t^{nu-1}}
+#'
+#' Probability density function of Weibull distribution with the proportional
+#' hazards parameterzation. Wrapper to pweibull with arguments that match
+#' the survival parameterrization
+#'
+#' @param x vector of quantiles
+#' @param lambda scale parameter
+#' @param nu shape parameter
+#'
+#' @return Weibull CDF evaluated at \code{x}
+#' @export
+#'
+#' @examples
+pweibull_surv = function(x, lambda, nu) {
+
+
+
+}
 
 eval_cdf.weibull = function(t, trt = 0, params){
   with(

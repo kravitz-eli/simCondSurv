@@ -1,5 +1,7 @@
 library(rjags)
 library(magrittr)
+library(survival)
+library(survminer)
 
 source("R/utils-pipe.R")
 source("R/cond_sample.R")
@@ -18,7 +20,7 @@ trt = monaleesa2$trt
 
 
 
-distribution = "lognormal"
+distribution = "loglogistic"
 
 # Fit the JAGS model ---------------------------------------
 n_iter = 1e3
@@ -38,7 +40,7 @@ model = run_jags(
 )
 
 post_params = tibble::as_tibble(model[[1]])
-names(post_params)[1] = "log_HR"
+# names(post_params)[1] = "log_HR"
 
 colMeans(post_params)
 

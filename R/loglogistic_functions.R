@@ -24,21 +24,15 @@ cond_sample.loglogistic <- function(
   )
 }
 
-get_paramater_names.loglogistic = function() c("mu", "sigma")
+eval_cdf.loglogistic = function(t, trt = 0, params){
 
-
-eval_cdf.loglogistic = function(t, trt = 0, alpha, beta, log_HR = 0){
   with(
     params,
-    plog_logistic(
-      t,
-     alpha = alpah
-      sdlog = sigma
-    )
+    plog_logistic(t, alpha = alpha, beta = beta)^exp(log_HR * trt)
   )
 }
 
-eval_pdf.loglogistic = function(t, trt = 0, alpha, beta, log_HR = 0){
+eval_pdf.loglogistic = function(t, trt = 0, params){
   dlnorm(
     t,
     meanlog = ifelse(trt == 0, log_HR, 0) + mu,
@@ -47,7 +41,7 @@ eval_pdf.loglogistic = function(t, trt = 0, alpha, beta, log_HR = 0){
 }
 
 plog_logistic = function(x, alpha, beta){
-  x^beta / (alpha^beta + x^beta)
+   x^beta / (alpha^beta + x^beta)
 
 }
 
