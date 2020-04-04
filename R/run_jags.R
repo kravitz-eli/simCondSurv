@@ -46,7 +46,7 @@ run_jags <- function(
   stats::update(jags_model, n.iter = n_burn, progress.bar = progress.bar)
   rjags::coda.samples(
     jags_model,
-    variable.names = names(unlist(jags_model$state())),
+    variable.names = names(jags_model$state()[[1]]),
     n.iter = n_iter,
     progress.bar = progress.bar
   )
