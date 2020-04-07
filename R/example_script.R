@@ -4,13 +4,18 @@ library(survival)
 library(survminer)
 
 source("R/utils-pipe.R")
-source("R/cond_sample.R")
-source("R/cond_sample.weibull.R")
+source("R/utilities.R")
+source("R/generic_functions.R")
+
+# source("R/weibull_functions.R")
+source("R/lognormal_functions.R")
+
 
 source("R/run_jags.R")
 source("R/get_conditional_times.R")
 source("R/censor_survival_time.R")
 source("R/run_projections.R")
+source("R/make_plots.R")
 
 data("monaleesa2")
 
@@ -20,16 +25,17 @@ trt = monaleesa2$trt
 
 
 
-distribution = "loglogistic"
+distribution = "lognormal"
+prop_haz = FALSE
 
 # Fit the JAGS model ---------------------------------------
-n_iter = 1e3
+n_iter = 100
 n_burn = 1e3
 n_adapt = 1e3
 
 model = run_jags(
   distribution = distribution,
-  prop_haz = TRUE,
+  prop_haz = prop_haz,
   time = time,
   event = event,
   trt = trt,
@@ -40,7 +46,7 @@ model = run_jags(
 )
 
 post_params = tibble::as_tibble(model[[1]])
-# names(post_params)[1] = "log_HR"
+
 
 colMeans(post_params)
 
@@ -49,6 +55,7 @@ surv_times = get_conditional_times(
   time = time,
   event = event,
   trt = trt,
+  prop_haz = prop_haz,
   distribution = distribution,
   n_events = 250,
   params = post_params
@@ -63,6 +70,7 @@ plots = make_plots(
   params = post_params,
   data = monaleesa2,
   post_pred_HR = time_projections$HR_at_events,
+  prop_haz = prop_haz,
   axis_min_time = 0,
   axis_max_time = 100
 )

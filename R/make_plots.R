@@ -1,19 +1,30 @@
 make_plots = function(
   params,
   data,
+  prop_haz = TRUE,
   post_pred_HR,
   criticial_value,
   axis_min_time = 0,
   axis_max_time = 100
 ){
 
-  survival_plot = plot_over_KM(
+  if (prop_haz) {
+  survival_plot = plot_over_KM_PH(
     data = data,
     params = params,
     distribution = distribution,
     axis_min_time = axis_min_time,
     axis_max_time = axis_max_time
   )
+  } else {
+    survival_plot = plot_over_KM_NPH(
+      data = data,
+      params = params,
+      distribution = distribution,
+      axis_min_time = axis_min_time,
+      axis_max_time = axis_max_time
+    )
+  }
 
   HR_plot = plot_hazard_ratio(HR = post_pred_HR)
 
@@ -23,7 +34,8 @@ make_plots = function(
 
 }
 
-plot_over_KM = function(
+# Turn these into methods soon
+plot_over_KM_PH = function(
   data,
   params,
   distribution,
@@ -48,6 +60,78 @@ plot_over_KM = function(
     post_median_trt[[i]] = median(1 - eval_cdf(params = params,
                                                t = time_seq[[i]],
                                                trt = 1))
+  }
+
+
+  plotting_grid = data.frame(time_seq, post_median_ctrl, post_median_trt)
+
+
+  # Plot settings -----------------------------
+  color_ctrl = "blue"
+  color_trt = "red"
+
+  # Make plot with survminer -----------------------
+  KM_fit = survfit(Surv(time, event) ~ trt, data = data)
+  KM_plot <- survminer::ggsurvplot(
+    KM_fit,
+    data = data,
+    palette = c(color_ctrl, color_trt),
+    ggtheme = theme_bw(),
+    xlim = c(axis_min_time, axis_max_time)
+  )
+
+  # Edit the survminer plot object
+
+  KM_plot$plot <- KM_plot$plot +
+    geom_line(
+      data = plotting_grid,
+      mapping = aes(x = time_seq, y = post_median_ctrl),
+      size = 1.2,
+      linetype = "dashed",
+      color = color_ctrl
+    ) +
+    geom_line(
+      data = plotting_grid,
+      mapping = aes(x = time_seq, y = post_median_trt),
+      size = 1.2,
+      linetype = "dashed",
+      color = color_trt
+    ) +
+    scale_x_continuous()
+
+
+}
+
+
+# Turn these into methods soon
+plot_over_KM_NPH = function(
+  data,
+  params,
+  distribution,
+  axis_min_time,
+  axis_max_time
+){
+
+  #!!! Add check to see if ggplot and survminer are installed!!
+  # requireNamespace("survminer", quietly = TRUE) & requireNamespace("ggplot2", quietly = TRUE)`
+
+  ctrl_param_index = which(endsWith(names(params), "[1]"))
+  trt_param_index = which(endsWith(names(params), "[2]"))
+
+  param_names = unique(remove_bracket(names(params)))
+
+  # Get a grid of timepoints and calculate the survival function at every point
+  time_seq = seq(axis_min_time, axis_max_time, by = 0.5)
+  class(params) <- c(distribution, class(params)) # Have to manually set the class for now
+
+  post_median_ctrl = vector('numeric', length(time_seq))
+  post_median_trt = vector('numeric', length(time_seq))
+  for(i in seq_along(time_seq)) {
+    post_median_ctrl[[i]] = median(1 - eval_cdf(params = setNames(params[, ctrl_param_index], param_names),
+                                                t = time_seq[[i]]))
+
+    post_median_trt[[i]] = median(1 - eval_cdf(params = setNames(params[, trt_param_index], param_names),
+                                                          t = time_seq[[i]]))
   }
 
 

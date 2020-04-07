@@ -1,17 +1,19 @@
 model{
 
-  for(i in 1:N){
+pi <- 3.14159
+
+  for(i in 1: length(t)){
     ones[i] ~ dbern(p[i]/10000000000)
-    p[i] <- S[i]*pow(h[i],event[i])
+    p[i] <- exp(-H[i])*pow(h[i],event[i])
 
-    h[i] <- exp(TRT[i]*log_HR)*(beta/alpha)*pow(t[i]/alpha,beta-1)/(1+pow(t[i]/alpha,beta))
-    S[i] <- pow(1/(1+pow(t[i]/alpha,beta)),exp(TRT[i]*log_HR))
-
+    h[i] <- (1/(sigma[TRT[i]]*t[i]*sqrt(2*pi)))*exp(-(1/2)*pow((log(t[i])-mu[TRT[i]])/sigma[TRT[i]],2))/(1-phi((log(t[i])-mu[TRT[i]])/sigma[TRT[i]]))
+    H[i] <- -log(1-phi((log(t[i])-mu[TRT[i]])/sigma[TRT[i]]))
   }
 
-  alpha ~ dnorm(0,.001)T(0,)
-  beta ~ dnorm(0,.001)T(0,)
-  log_HR ~ dnorm(0,.001)
+  mu[1]~dnorm(0,.001)
+  sigma[1]~dunif(0,10)
+  mu[2]~dnorm(0,.001)
+  sigma[2]~dunif(0,10)
 
   P = prod(p)
 

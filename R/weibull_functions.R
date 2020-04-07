@@ -14,6 +14,7 @@ cond_sample.weibull <- function(
   u,
   t0,
   trt = 0,
+  log_HR = 0,
   params
 ){
 
@@ -23,7 +24,6 @@ cond_sample.weibull <- function(
   )
 }
 
-qweibull_conditional = function(u)
 
 #' Alternate parameterization of Weibull CDF with hazard: \eqn{\nu \lambda t^{nu-1}}
 #'
@@ -72,7 +72,7 @@ dweibull_surv = function(x, lambda, nu) {
 }
 
 
-eval_cdf.weibull = function(t, trt = 0, params){
+eval_cdf.weibull = function(t, trt = 0, log_HR = 0, params){
   with(
     params,
     pweibull(
