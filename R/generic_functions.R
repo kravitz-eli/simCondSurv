@@ -36,5 +36,8 @@ cond_sample.default <- function(x, ...){
 # Survival functions have different parameterizations than R's built in pdistribution, cdistribution, qdistribution
 eval_pdf = function(x, ...) UseMethod("eval_pdf")
 
-eval_cdf = function(x, ...) UseMethod("eval_cdf")
+get_param_nameseval_cdf = function(x, ...) UseMethod("eval_cdf")
+
+
+get_paramater_names = function(x, ...) UseMethod("get_paramater_names", x)
 

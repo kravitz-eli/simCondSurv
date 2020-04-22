@@ -10,51 +10,54 @@
 #'
 #' @examples
 get_conditional_times = function(
-  time,
-  event,
-  trt,
-  distribution,
-  prop_haz = TRUE,
+  data_and_model,
   n_events = NA,
-  params
 ){
 
   post_pred_times = vector("list", length = nrow(params))
 
-  if (prop_haz) {
-    for (i in 1:nrow(params)) {
-      post_pred_times[[i]] = get_single_conditional_times_PH(
-        time,
-        event = event,
-        trt = trt,
-        distribution = distribution,
-        n_events = 250,
-        params = params[i, ]
-      )
-    }
-  } else {
-    for (i in 1:nrow(params)) {
 
-      post_pred_times[[i]] = get_single_conditional_times_NPH(
-        time,
-        event = event,
-        trt = trt,
-        distribution = distribution,
-        n_events = 250,
-        params = params[i, ]
-      )
-    }
+  for (i in 1:nrow(params)) {
+    post_pred_times[[i]] = get_single_conditional_times_PH(
+      data_and_model,
+      post_params_i = post_params,
+      n_events = 250
+    )
   }
+
+  # if (prop_haz) {
+  #   for (i in 1:nrow(params)) {
+  #     post_pred_times[[i]] = get_single_conditional_times_PH(
+  #       time,
+  #       event = event,
+  #       trt = trt,
+  #       distribution = distribution,
+  #       n_events = 250,
+  #       params = params[i, ]
+  #     )
+  #   }
+  # } else {
+  #   for (i in 1:nrow(params)) {
+  #
+  #     post_pred_times[[i]] = get_single_conditional_times_NPH(
+  #       time,
+  #       event = event,
+  #       trt = trt,
+  #       distribution = distribution,
+  #       n_events = 250,
+  #       params = params[i, ]
+  #     )
+  #   }
+  # }
 
   return(post_pred_times)
 
 }
 
 
-# get_single_conditional_times = function(x, ...){
-#   browser()
-#   UseMethod("get_single_conditional_times", x)
-# }
+get_single_conditional_times = function(x, ...){
+  UseMethod("get_single_conditional_times", x)
+}
 
 #' Generate ONE sample from the posterior predictive of conditional survival times.
 #'
@@ -74,20 +77,17 @@ get_conditional_times = function(
 #' @export
 #'
 #' @examples
-get_single_conditional_times_PH = function(
-  time,
-  event,
-  trt,
-  distribution,
-  n_events = NA,
-  params
+get_single_conditional_times.PH = function(
+  data_and_model,
+  post_params_i, # a single draw from the posterior distribution of each parameter. 1xp data.frame
+  n_events = NA
 ){
 
-  u <- structure(runif(length(time), 0 , 1), class = c(distribution, "numeric"))
+  u <- structure(runif(length(time), 0 , 1), class = c(data_and_model$distribution, "numeric"))
   additional_time <- (1 - event) * cond_sample(u,
-                                               t0 = time,
-                                               trt = trt,
-                                               params = params)
+                                               t0 = data_and_model$time,
+                                               trt = data_and_model$trt,
+                                               params = post_params_i)
 
 
 
@@ -97,44 +97,45 @@ get_single_conditional_times_PH = function(
 }
 
 
-get_single_conditional_times_NPH = function(
-  time,
-  event,
-  trt,
-  distribution,
-  n_events = NA,
-  params
+get_single_conditional_times.NPH = function(
+  data_and_model,
+  post_params_i, # a single draw from the posterior distribution of each parameter. 1xp data.frame
+  n_events = NA
 ){
 
-  ctrl_patients <- which(trt == 0)
-  trt_patients <- which(trt == 1)
 
-  ctrl_param_index = which(endsWith(names(params), "[1]"))
-  trt_param_index = which(endsWith(names(params), "[2]"))
 
-  param_names = unique(remove_bracket(names(params)))
+  # Seperately simulate survival times for two arms. Can't simulate at the same
+  # time when there is no hazard ratio               ---------------------------
 
-  # Seperate Vectors of random U[0,1] to simulate from both arms seperately
+  # control arm: ----------------------------------
+  ctrl_patients <- which(data_and_model$trt == 0)
   u_ctrl <- structure(runif(length(ctrl_patients), 0 , 1),
                       class = c(distribution, "numeric"))
+
+  additional_time_ctrl <- (1 - data$event[ctrl_patients]) * cond_sample(
+    u_ctrl,
+    t0 = data$time[ctrl_patients],
+    trt = data$trt[ctrl_patients],
+    params = setNames(post_params_i[, data_and_model$ctrl_param_index],
+                      data_and_model$param_names)
+  )
+
+  # Treatment arm --------------------------------------------
   u_trt <- structure(runif(length(trt_patients), 0 , 1),
                      class = c(distribution, "numeric"))
+  trt_patients <- which(data_and_model$trt == 1)
 
-  additional_time_ctrl <- (1 - event[ctrl_patients]) * cond_sample(
-    u_ctrl,
-    t0 = time[ctrl_patients],
-    trt = trt[ctrl_patients],
-    params = setNames(params[, ctrl_param_index], param_names)
+  additional_time_trt <- (1 - data$event[trt_patients]) * cond_sample(
+    u_trt,
+    t0 = data$time[trt_patients],
+    trt = data$trt[trt_patients],
+    params = setNames(data_and_model$post_params[, data_and_model$trt_param_index],
+                      data_and_model$param_names)
   )
 
-  additional_time_trt <- (1 - event[trt_patients]) * cond_sample(
-    u_ctrl,
-    t0 = time[trt_patients],
-    trt = trt[trt_patients],
-    params = setNames(params[, trt_param_index], param_names)
-  )
-
-  additional_time = vector(length = length(trt))
+  # Combine simulated survival times from both arms ------------------------
+  additional_time = vector(length = length(data$trt))
   additional_time[ctrl_patients] = additional_time_ctrl
   additional_time[trt_patients] = additional_time_trt
 

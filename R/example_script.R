@@ -12,12 +12,13 @@ source("R/lognormal_functions.R")
 
 
 source("R/run_jags.R")
+source("R/make_data_and_model.R")
 source("R/get_conditional_times.R")
 source("R/censor_survival_time.R")
 source("R/run_projections.R")
 source("R/make_plots.R")
 
-data("monaleesa2")
+data <- data("monaleesa2")
 
 time = monaleesa2$time
 event = monaleesa2$event
@@ -45,10 +46,16 @@ model = run_jags(
   n_adapt = n_adapt
 )
 
-post_params = tibble::as_tibble(model[[1]])
+
+data_and_model = make_data_and_model(
+  data = monaleesa2,
+  model = model,
+  distribution = distribution,
+  prop_haz = prop_haz
+)
 
 
-colMeans(post_params)
+colMeans(data_and_model$post_params)
 
 
 surv_times = get_conditional_times(
