@@ -28,7 +28,7 @@ cond_sample.lognormal  <- function(
 }
 
 
-get_paramater_names.lognormal = function() c("mu", "sigma")
+get_paramater_names.lognormal = function(x) c("mu", "sigma")
 
 
 eval_cdf.lognormal = function(t, trt = 0, log_HR = 0, params){
