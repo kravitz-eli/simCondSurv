@@ -11,7 +11,7 @@
 #' @examples
 get_conditional_times = function(
   data_and_model,
-  n_events = NA,
+  n_events = NA
 ){
 
   post_pred_times = vector("list", length = nrow(params))
