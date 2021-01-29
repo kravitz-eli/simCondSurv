@@ -24,6 +24,8 @@ cond_sample.weibull <- function(
   )
 }
 
+get_paramater_names.weibull = function(x) c("lambda", "nu")
+
 
 #' Alternate parameterization of Weibull CDF with hazard: \eqn{\nu \lambda t^{nu-1}}
 #'

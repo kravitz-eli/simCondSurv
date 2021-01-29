@@ -24,6 +24,8 @@ cond_sample.loglogistic <- function(
   )
 }
 
+get_paramater_names.lognormal = function(x) c("mu", "sigma")
+
 eval_cdf.loglogistic = function(t, trt = 0, params){
 
   with(

@@ -2,14 +2,14 @@ model{
 
   for(i in 1:length(t)) {
     ##Bernoulli is used to deal with custom joint likelihood with right censoring
-    ones[i]~dbern(p[i]/10000000)
+    ones[i] ~ dbern(p[i] / 10000000)
 
     ## ith contribution to the joint likelihood
-    p[i] <- exp(-H[i])* pow(h[i],event[i])
+    p[i] <- exp(-H[i]) * pow(h[i], event[i])
 
     ## hazard and cumulative hazard functions
-    h[i] <- nu[TRT[i]]*lambda[TRT[i]]*pow(t[i],nu[TRT[i]]-1)
-    H[i] <- lambda[TRT[i]]*pow(t[i],nu[TRT[i]])
+    h[i] <- nu[TRT[i]] * lambda[TRT[i]] * pow(t[i], nu[TRT[i]] - 1)
+    H[i] <- lambda[TRT[i]] * pow(t[i], nu[TRT[i]])
   }
 
   ##Priors

@@ -45,7 +45,7 @@ eval_cdf.lognormal = function(t, trt = 0, log_HR = 0, params){
 eval_pdf.lognormal = function(t, trt = 0, lambda, nu, log_HR = 0){
   plnorm(
     t,
-    meanlog = ifelse(trt == 0, log_HR, 0) + mu,
+    meanlog = mu + ifelse(trt == 0, log_HR, 0),
     sdlog = sigma
   )
 }
