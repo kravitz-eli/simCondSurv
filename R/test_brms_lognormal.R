@@ -34,4 +34,5 @@ freq_model <- flexsurvreg(Surv(obs_time, event) ~ arm, dist = "lnorm", data = pt
 
 bayes_model <- brm(obs_time | cens(event) ~ arm,
                    family = "lognormal",
+                   save_model = "lnorm.stan",
                    data = pts_df)
